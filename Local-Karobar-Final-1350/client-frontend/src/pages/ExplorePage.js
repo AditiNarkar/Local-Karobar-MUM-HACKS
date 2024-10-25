@@ -140,7 +140,7 @@ useEffect(() => {
 }, [category])
 
 
-const exploreURL = "http://localhost:5000/api/exploredata"
+const exploreURL = "http://localhost:5001/api/exploredata"
 
 const getData = async() => {
   const response = await fetch(exploreURL, {
@@ -275,7 +275,7 @@ useEffect(()=> {
         onClick={ async (e)=>{
           e.preventDefault();
 
-          const sendParamsURL = "http://localhost:5000/api/filtereddata"
+          const sendParamsURL = "http://localhost:5001/api/filtereddata"
           
           const res = await fetch(sendParamsURL, {
             method:"POST",

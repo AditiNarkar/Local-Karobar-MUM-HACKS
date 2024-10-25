@@ -26,7 +26,7 @@ const ViewPage = () => {
 
   const karobarData = async(userId,karobarId) => {
    
-    const userdataURL = "http://localhost:5000/api/viewkarobar"
+    const userdataURL = "http://localhost:5001/api/viewkarobar"
    
     const res = await fetch(userdataURL,{ 
     method: "POST",

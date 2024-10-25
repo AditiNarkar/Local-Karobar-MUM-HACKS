@@ -1,26 +1,26 @@
 import "../CSS/MyKarobarsPage.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Footer} from "../components/Footer"
-import {Header} from "../components/Header"
-import {ProfileLeftNav} from "../components/ProfileLeftNav"
-import {MyKarobarCard} from "../components/MyKarobarCard"
+import { Footer } from "../components/Footer"
+import { Header } from "../components/Header"
+import { ProfileLeftNav } from "../components/ProfileLeftNav"
+import { MyKarobarCard } from "../components/MyKarobarCard"
 import React from 'react'
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 
 const MyKarobarsPage = () => {
 
-  const mykarobarsURL = "http://localhost:5000/api/mykarobars"  
+  const mykarobarsURL = "http://localhost:5001/api/mykarobars"
   const navigate = useNavigate()
 
   const [user, setUser] = useState({})
 
   const getData = async () => {
-    try{
-      const res = await fetch(mykarobarsURL,{
-        method: "GET", 
-        headers:{
+    try {
+      const res = await fetch(mykarobarsURL, {
+        method: "GET",
+        headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
         },
@@ -28,31 +28,31 @@ const MyKarobarsPage = () => {
       })
 
       const data = await res.json()
-     // console.log(data)
-     // console.log(data.karobars)
+      // console.log(data)
+      // console.log(data.karobars)
       setUser(data)
-     
+
       // if(!res.status == 200){
       //   console.log(res.error)
       // }
     }
-    
-    catch(e){
+
+    catch (e) {
       console.log(e)
       window.alert("Please try after some time.")
       //navigate("/loginpage")
     }
   }
 
-  useEffect(()=> { getData() }, [])
+  useEffect(() => { getData() }, [])
 
   return (
-    
+
     <>
-    <ToastContainer toastStyle={{ zIndex:"10000", color: "#874d00", boxShadow:"12px 12px 2px 1px #453400;", fontSize: "18px", borderRadius: "20px"}} />
-    
-    <div className="my-karobars-page">
-      {/* <header className="navbar6">
+      <ToastContainer toastStyle={{ zIndex: "10000", color: "#874d00", boxShadow: "12px 12px 2px 1px #453400;", fontSize: "18px", borderRadius: "20px" }} />
+
+      <div className="my-karobars-page">
+        {/* <header className="navbar6">
         <div className="nav-links6">
           <div className="contact12">Contact</div>
           <div className="about6">{`About `}</div>
@@ -61,12 +61,12 @@ const MyKarobarsPage = () => {
         <button className="logout-2-13" />
         <div className="profile13">Signed In as: Username</div>
       </header> */}
-      <Header cssclass="navbar" data={user.username}/>
+        <Header cssclass="navbar" data={user.username} />
 
-      <div className="right-side2">
-        <div className="search-list1">
+        <div className="right-side2">
+          <div className="search-list1">
 
-          {/* <button style={{
+            {/* <button style={{
             display: "flex",
             backgroundColor:"#faffb7",
             color: "brown",
@@ -80,11 +80,11 @@ const MyKarobarsPage = () => {
             You have no karobars yet, Upload now !
           </button> */}
 
-        
-          <MyKarobarCard user={user} karobars={user.karobars}/>
+
+            <MyKarobarCard user={user} karobars={user.karobars} />
 
 
-          {/* <div className="my-karobar-card">
+            {/* <div className="my-karobar-card">
             <img
               className="profile-image-icon2"
               alt=""
@@ -109,22 +109,22 @@ const MyKarobarsPage = () => {
             </button>
           </div> */}
 
-          
-        </div>
-      </div>
 
-      {/* <section className="footer6">
+          </div>
+        </div>
+
+        {/* <section className="footer6">
         <div className="copyright-footer6">CopyRight FOOTER</div>
       </section> */}
-      <Footer cssclass="footer"/>
+        <Footer cssclass="footer" />
 
-      <div className="fixed-holder "> 
-      <div className="profile43">M Y <div style={{width:"14px"}}/>K A R O B A R S</div>
-      <div className="divider10" />
-      </div>
+        <div className="fixed-holder ">
+          <div className="profile43">M Y <div style={{ width: "14px" }} />K A R O B A R S</div>
+          <div className="divider10" />
+        </div>
 
 
-      {/* <div className="left-side-nav1">
+        {/* <div className="left-side-nav1">
         <img className="logo-1-icon6" alt="" src="/logo-13@2x.png" />
         <div className="profile44">My Karobars</div>
         <div className="profile45">Logout</div>
@@ -133,9 +133,9 @@ const MyKarobarsPage = () => {
         <div className="divider11" />
       </div> */}
 
-      <ProfileLeftNav active="my-karobars" user={user.username}/>
+        <ProfileLeftNav active="my-karobars" user={user.username} />
 
-    </div>
+      </div>
     </>
   )
 }

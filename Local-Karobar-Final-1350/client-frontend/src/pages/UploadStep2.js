@@ -1,7 +1,7 @@
 import "../CSS/UploadStep2.css";
-import {Header} from "../components/Header"
-import {Footer} from "../components/Footer"
-import { useState,useEffect } from "react";
+import { Header } from "../components/Header"
+import { Footer } from "../components/Footer"
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import React from 'react'
 import { ToastContainer, toast } from "react-toastify"
@@ -11,7 +11,7 @@ const UploadStep2 = () => {
 
   const [karobar, setKarobar] = useState({
     orgName: "", no_of_people: 1, orgEmail: "", otp: "", gender: "Male", brContact: "",
-     brLat:"", brLng: "", addTag: "", addDesc: ""
+    brLat: "", brLng: "", addTag: "", addDesc: ""
   })
 
   // const { selectedPlace } = 
@@ -19,12 +19,12 @@ const UploadStep2 = () => {
   //     JSON.parse(localStorage.getItem('mapsAddress')) 
   //   : {}
 
-  const [ brAddress, setBrAddress] = useState(
+  const [brAddress, setBrAddress] = useState(
     localStorage.getItem('mapsAddress') || ""
   );
 
   //console.log("brAdress", brAddress)
-  
+
   //const [ selectedPlace2, setSelectedPlace ] = useState(selectedPlace || {})
 
   const handleInputs = (e) => {
@@ -35,7 +35,7 @@ const UploadStep2 = () => {
 
   const handleInputChange = (e) => {
     setBrAddress(e.target.value);
-    localStorage.setItem('mapsAddress',(e.target.value));
+    localStorage.setItem('mapsAddress', (e.target.value));
   };
 
   // Add an event listener to detect changes in localStorage
@@ -56,9 +56,9 @@ const UploadStep2 = () => {
 
 
 
-  const step2URL = "http://localhost:5000/api/uploadstep2process"
-  const step2URL_2 = "http://localhost:5000/api/uploadInUploads"
-  
+  const step2URL = "http://localhost:5001/api/uploadstep2process"
+  const step2URL_2 = "http://localhost:5001/api/uploadInUploads"
+
   const [otp, setOtp] = useState("")
 
 
@@ -66,12 +66,12 @@ const UploadStep2 = () => {
   const [dbuserId, setuserId] = useState("")
 
   const getData = async () => {
-    try{
-      const res = await fetch(step2URL,{
-        method:"GET",
-        headers:{
+    try {
+      const res = await fetch(step2URL, {
+        method: "GET",
+        headers: {
           Accept: "application/json",
-          "Content-Type" : "application/json"
+          "Content-Type": "application/json"
         },
         credentials: "include"
       })
@@ -79,38 +79,38 @@ const UploadStep2 = () => {
       setUsername(data.rootUser.username)
       setuserId(data.Id)
       //setEmail(data.rootUser.email)
-      
 
-      if(!res.status == 200){
+
+      if (!res.status == 200) {
         const error = new Error(res.error)
         throw error
 
       }
-    }catch(e){
+    } catch (e) {
       console.log(e)
     }
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     getData();
-  },[])
+  }, [])
 
 
-  const sendotpURL = "http://localhost:5000/api/generateotp"
-  const sendOTP = async(e) => {
+  const sendotpURL = "http://localhost:5001/api/generateotp"
+  const sendOTP = async (e) => {
     e.preventDefault()
     const response = await fetch(sendotpURL, {
       method: 'POST',
       headers: {
-        "Content-Type" : "application/json"
+        "Content-Type": "application/json"
       },
-      body : JSON.stringify({orgEmail})
-    
+      body: JSON.stringify({ orgEmail })
+
     })
 
     const data = await response.json()
 
-    if(data.status==201){
+    if (data.status == 201) {
       toast(data.msg, {
         className: 'foo-bar',
         autoClose: 4000,
@@ -119,7 +119,7 @@ const UploadStep2 = () => {
         draggable: true,
       })
     }
-    else{
+    else {
       toast(data.msg, {
         className: 'foo-bar',
         autoClose: 4000,
@@ -131,22 +131,22 @@ const UploadStep2 = () => {
   }
 
   const [verifiedOTP, setVerifiedOTP] = useState(0);
-  const verifyotpURL = "http://localhost:5000/api/verifyotp"
-  const verifyOTP = async(e) => {
-   // console.log("server otp is " , otp)
+  const verifyotpURL = "http://localhost:5001/api/verifyotp"
+  const verifyOTP = async (e) => {
+    // console.log("server otp is " , otp)
     e.preventDefault()
     const response = await fetch(verifyotpURL, {
       method: 'POST',
       headers: {
-        "Content-Type" : "application/json"
+        "Content-Type": "application/json"
       },
-      body : JSON.stringify({otp})
-    
+      body: JSON.stringify({ otp })
+
     })
 
     const data = await response.json()
 
-    if(data.status==201){
+    if (data.status == 201) {
       toast(data.msg, {
         className: 'foo-bar',
         autoClose: 4000,
@@ -165,7 +165,7 @@ const UploadStep2 = () => {
       verify.disabled = true
 
     }
-    else{
+    else {
       toast(data.msg, {
         className: 'foo-bar',
         autoClose: 4000,
@@ -190,14 +190,14 @@ const UploadStep2 = () => {
     const formData = new FormData()
     const { orgName, no_of_people, otp, gender, brContact, brLat, brLng, addTag, addDesc } = karobar //addition
 
-     //addition
+    //addition
     const input = document.querySelector('input[name="karobarphotos"]')
-    if(input.files){
+    if (input.files) {
       for (const file of input.files) {
         formData.append("karobarphotos", file)
       }
     }
-    
+
     if (profilephoto)
       formData.append("profilephoto", profilephoto)
     else
@@ -237,11 +237,11 @@ const UploadStep2 = () => {
 
     //addition
     if (data.status == 200) {
-     localStorage.setItem('karobarInfo', '')
-     localStorage.setItem('mapsAddress', '')
+      localStorage.setItem('karobarInfo', '')
+      localStorage.setItem('mapsAddress', '')
 
       formData.append("karobarIndex", data.karobarIndex)
-      formData.append("branchIndex", data.branchIndex) 
+      formData.append("branchIndex", data.branchIndex)
 
       const response2 = await fetch(step2URL_2, {
         method: "POST",
@@ -249,7 +249,7 @@ const UploadStep2 = () => {
       })
 
       const data2 = await response2.json();
-     // console.log("fghj", data2.status, data2.msg)
+      // console.log("fghj", data2.status, data2.msg)
       if (data2.status == 200) {
         toast(data2.msg, {
           className: 'foo-bar',
@@ -284,15 +284,15 @@ const UploadStep2 = () => {
   }
 
   const [counter, setCounter] = useState(1)
-  const minCount = 1;  
-  const maxCount = 10; 
+  const minCount = 1;
+  const maxCount = 10;
 
   const increment = (e) => {
     e.preventDefault()
     if (counter < maxCount) {
       setCounter(counter + 1);
     }
-    if(counter==10){
+    if (counter == 10) {
       toast("Branch limit reached", {
         className: 'foo-bar',
         autoClose: 5000,
@@ -322,14 +322,14 @@ const UploadStep2 = () => {
     e.preventDefault();
     window.open('http://localhost:3000/maps', '_blank');
   }
-  
+
   return (
 
 
-    <form method="POST" encType = "multipart/formdata">
-    <ToastContainer toastStyle={{ color: "#874d00", boxShadow:"12px 12px 2px 1px #453400;", fontSize: "18px", borderRadius: "20px"}} />
-      
-    <div className="upload-step2">
+    <form method="POST" encType="multipart/formdata">
+      <ToastContainer toastStyle={{ color: "#874d00", boxShadow: "12px 12px 2px 1px #453400;", fontSize: "18px", borderRadius: "20px" }} />
+
+      <div className="upload-step2">
 
         {/* <header className="navbar8">
           <div className="nav-links8">
@@ -340,24 +340,24 @@ const UploadStep2 = () => {
           <button className="logout-2-15" />
         </header> */}
 
-        <Header cssclass="navbar" data = {username}/>
+        <Header cssclass="navbar" data={username} />
 
         <div className="title1">
           <img className="logo-1-icon8" alt="" src="/logo-12@2x.png" />
           <div className="add-text2">UPLOAD MY KAROBAR</div>
           <div className="add-text3">STEP - 2</div>
         </div>
-        
+
         <section className="yellow-box6">
           <div className="yellow-box-before9">
             <div className="profile66">G E N E R A L </div>
             <div className="profile67" >Name of Organization* :</div>
-            <input className="org-name-ip" value={karobar.orgName} type="text" onChange={handleInputs} name= "orgName" />
+            <input className="org-name-ip" value={karobar.orgName} type="text" onChange={handleInputs} name="orgName" />
           </div>
 
           <div className="inputs">
             <div className="gender1">Gender of owner* :</div>
-            <select className="gender-input1" id="" name = "gender" value={karobar.gender} onChange={handleInputs}>
+            <select className="gender-input1" id="" name="gender" value={karobar.gender} onChange={handleInputs}>
               <option >Male</option>
               <option >Female</option>
               <option >Others</option>
@@ -365,25 +365,25 @@ const UploadStep2 = () => {
             {/* <input className="gender-input1" type="text" /> */}
 
             <div className="people7">No. of people* :</div>
-            <input className="people-input1" type="number" value={karobar.no_of_people} onChange={handleInputs} name= "no_of_people" />
+            <input className="people-input1" type="number" value={karobar.no_of_people} onChange={handleInputs} name="no_of_people" />
           </div>
 
           <div className="contact-inputs2">
-            <input className="contact-input4" type="text" value={orgEmail} onChange={handleInputs} name= "orgEmail" disabled= "true"/>
+            <input className="contact-input4" type="text" value={orgEmail} onChange={handleInputs} name="orgEmail" disabled="true" />
             <div className="contact15">Email address :</div>
           </div>
           <div className="otp">
-            <input className="otp-input" type="text" value={otp} onChange={(e) => setOtp(e.target.value)} name = "otp"  id="otp"/>
+            <input className="otp-input" type="text" value={otp} onChange={(e) => setOtp(e.target.value)} name="otp" id="otp" />
             <div className="contact16">OTP* :</div>
           </div>
-         
-          
+
+
           <div className="profile-section1">
             <input className="profile-input3" name="profilephoto" accept="image/*" onChange={handleImage1} type="file" />
             <div className="profile68"  >Profile Photo :</div>
 
 
-{/* addition */}
+            {/* addition */}
             {(profilephoto) ?
               <img
                 className="profile-image-icon10"
@@ -398,25 +398,25 @@ const UploadStep2 = () => {
 
           </div>
 
-{/* addition */}
+          {/* addition */}
 
           <div className="contact17">Add gallery :</div>
           <input name="karobarphotos" className="add-photos-input-upload" accept="image/*" onChange={handleImage2} type="file" multiple />
           <div className="photos3">
             {
-              
-              (karobarphotos)? 
-                
-              Array.from(karobarphotos).map((i)=> {
-                return (
-                <img 
-                  className="sample-photo2" 
-                  src= {URL.createObjectURL(i)} 
-                />
-                )
-              })
-              : 
-              <div className="sample-photo2" > No photos selected. </div>
+
+              (karobarphotos) ?
+
+                Array.from(karobarphotos).map((i) => {
+                  return (
+                    <img
+                      className="sample-photo2"
+                      src={URL.createObjectURL(i)}
+                    />
+                  )
+                })
+                :
+                <div className="sample-photo2" > No photos selected. </div>
             }
           </div>
 
@@ -424,7 +424,7 @@ const UploadStep2 = () => {
 
           <div className="branches-input">
             <div className="email7">No. of Branches* :</div>
-            <input className="branch-input" type="text" min="1" max="10" value={counter} name = "no_of_branches"/>
+            <input className="branch-input" type="text" min="1" max="10" value={counter} name="no_of_branches" />
             <button className="minus-button1" onClick={(e) => decrement(e)}>
               <div className="div10">-</div>
             </button>
@@ -440,75 +440,226 @@ const UploadStep2 = () => {
           <button className="send-otp-btn" name="sendotp" id="sendotp" onClick={sendOTP}>
             <div className="verify-button3">Send OTP</div>
           </button>
-          <button className="verify-otp-btn"name="verifyotp" id="verifyotp" onClick={verifyOTP} >
+          <button className="verify-otp-btn" name="verifyotp" id="verifyotp" onClick={verifyOTP} >
             <div className="verify-button3" >Verify OTP</div>
           </button>
-          
+
         </section>
 
-      {/* <UploadBranchBox */}
-          <div className="upload-side-branch-box">
-            <div className="yellow-box-before10">
-              <div className="profile69">B R A N C H  &nbsp;&nbsp;&nbsp; D E T A I L S</div>
+        {/* <UploadBranchBox */}
+        <div className="upload-side-branch-box">
+          <div className="yellow-box-before10">
+            <div className="profile69">B R A N C H  &nbsp;&nbsp;&nbsp; D E T A I L S</div>
+          </div>
+          <div className="divider14" />
+          <div className="contact-address-inputs4">
+
+            <div className="contact18">Contact of branch* :</div>
+            <input className="branch-contact" value={karobar.brContact} onChange={handleInputs} name='brContact' type="text" />
+
+            <div className="address5">Working Area / Address*: </div>
+            <textarea
+              className="address-input4"
+              style={{ fontFamily: 'Arial' }}
+              value={
+                brAddress
+              }
+              onChange={handleInputChange}
+              name='brAddress'
+            />
+
+            <button className="open-maps-button20" onClick={openMaps}>
+              <div className="use-maps1">Open Maps</div>
+            </button>
+
+          </div>
+
+          <div className="upload-right-side">
+            <div className="address4">
+              Additional Information :
             </div>
-              <div className="divider14" />
-                <div className="contact-address-inputs4">
+            {/* <UploadAdditionalInfo /> */}
 
-                <div className="contact18">Contact of branch* :</div>
-                <input className="branch-contact" value={karobar.brContact} onChange={handleInputs} name='brContact'  type="text" />
+            <input placeholder="Add Tag (Timings, Cost, etc.)" className="additional-tag-input" name="addTag" value={karobar.addTag}
+              onChange={handleInputs} type="text" />
+            <div style={{ height: "10px" }} />
+            <textarea style={{ fontFamily: 'Arial' }} placeholder="Add Description..." className="additional-info-desc-input" name="addDesc" value={karobar.addDesc}
+              onChange={handleInputs} />
 
-                <div className="address5">Working Area / Address*: </div>
-                <textarea 
-                  className="address-input4" 
-                  style={{ fontFamily: 'Arial'}}
-                  value={
-                    brAddress
-                  } 
-                  onChange={handleInputChange} 
-                  name='brAddress' 
-                />
-
-                <button className="open-maps-button20" onClick={openMaps}>
-                  <div className="use-maps1">Open Maps</div>
-                </button>
-
-              </div>
-              
-              <div className="upload-right-side">
-                <div className="address4">
-                  Additional Information :
-                </div>
-                {/* <UploadAdditionalInfo /> */}
-
-                <input placeholder="Add Tag (Timings, Cost, etc.)" className="additional-tag-input"  name = "addTag" value= {karobar.addTag}
-                onChange={handleInputs}  type="text" />
-                <div style={{height:"10px"}}/>
-                <textarea style={{ fontFamily: 'Arial'}} placeholder="Add Description..." className="additional-info-desc-input" name = "addDesc" value= {karobar.addDesc}
-                onChange={handleInputs} />
-
-                <div style={{ width:"550px", height:"1px", marginTop:"10px",marginBottom:"10px", background:"darkgreen", display:"flex", justifyContent:"left"}}></div>
-                {/* <button className="upload-additional-info-btn">
+            <div style={{ width: "550px", height: "1px", marginTop: "10px", marginBottom: "10px", background: "darkgreen", display: "flex", justifyContent: "left" }}></div>
+            {/* <button className="upload-additional-info-btn">
                   <div className="use-maps1">+</div>
                 </button>  */}
+          </div>
+        </div>
+
+        <div className="add-supplier-box">
+          <div className="yellow-box-before10">
+            <div className="profile-add-supplier">A D D &nbsp;&nbsp;&nbsp; S U P P L I E R</div>
+          </div>
+          <div className="divider14" />
+
+          <div className="create-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Supplier ID</th>
+                  <th>Supplier Name</th>
+                  <th>Contact</th>
+                  <th>Address</th>
+                  <th>Lead Time (days)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>001</td>
+                  <td>XYZ</td>
+                  <td>9876098765</td>
+                  <td>Thane</td>
+                  <td>2</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="add-inputs4">
+            <div className="contact18">Supplier ID* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Supplier Name* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Contact* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Address* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Lead Time* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+
+            <button className="open-maps-button20" onClick={openMaps}>
+              <div className="use-maps1">Add </div>
+            </button>
+
+          </div>
+
+        </div>
 
 
-              </div>
-            </div>  
-        
+
+
+        <div className="add-supplier-box">
+          <div className="yellow-box-before10">
+            <div className="profile-add-supplier">A D D &nbsp;&nbsp;&nbsp; S T O C K</div>
+          </div>
+          <div className="divider14" />
+
+          <div className="create-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Qty. in Stock</th>
+                  <th>Min. Level</th>
+                  <th>Max. Level</th>
+                  <th>Supplier</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>001</td>
+                  <td>XYZ</td>
+                  <td>9876098765</td>
+                  <th>001</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="add-inputs4">
+            <div className="contact18">Qty. in Stock* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Min. Level* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Max. Level* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Supplier* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+
+            <button className="open-maps-button20" onClick={openMaps}>
+              <div className="use-maps1">Add </div>
+            </button>
+
+          </div>
+
+        </div>
 
 
 
-        {/* <button className="add-branch-btn" onClick={(e) => increment(e)}>
-          <div className="div12">+</div>
-        </button> */}
-       <button className="upload-button2" onClick={(e) => postKarobar(e)}>
+        <div className="add-supplier-box">
+          <div className="yellow-box-before10">
+            <div className="profile-add-supplier">A D D &nbsp;&nbsp;&nbsp; I T E M S</div>
+          </div>
+          <div className="divider14" />
+
+          <div className="create-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item ID / Code</th>
+                  <th>Item Name</th>
+                  <th>SKU</th>
+                  <th>Description</th>
+                  <th>Selling Prize (INR)</th>
+                  <th>Cost Prize (INR)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>98875684</td>
+                  <td>XYZ</td>
+                  <td>001</td>
+                  <td>round, circular</td>
+                  <td>300</td>
+                  <td>100</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="add-inputs4">
+            <div className="contact18">Item ID / Code* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Item Name* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">SKU (Stock Keeping Unit)* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Description* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Selling Prize (INR)* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <div className="contact18">Cost Prize (INR)* :</div>
+            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+
+            <button className="open-maps-button20" onClick={openMaps}>
+              <div className="use-maps1">Add </div>
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+
+        <button className="upload-button2" onClick={(e) => postKarobar(e)}>
           <div className="upload-my-karobar">Upload My Karobar</div>
         </button>
-        
 
-      <Footer cssclass="footer8"/>
 
-    </div>
+        <Footer cssclass="footer8" />
+
+      </div>
 
     </form>
   );
