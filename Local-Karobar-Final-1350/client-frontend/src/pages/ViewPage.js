@@ -1,5 +1,7 @@
 import "../CSS/ViewPage.css";
 import "../CSS/UploadStep2.css";
+import "../CSS/chart.css";
+
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 import { ViewBranchBox } from "../components/ViewBranchBox"
@@ -197,12 +199,12 @@ const ViewPage = () => {
 
       <section className="auto-layout-yellow-box">
 
-        <div className="yellow-box4">
+        <div className="yellow-box4 chart-box">
           <div className="yellow-box-before4" />
-
-          <div className="divider5" />
           <div className="profile2">A N A L Y S I S</div>
-          <ChartComponent />
+          <div class="chart">
+            <ChartComponent />
+          </div>
         </div>
 
       </section>

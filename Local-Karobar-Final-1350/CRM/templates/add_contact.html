@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{% if contact %}Edit{% else %}Add{% endif %} Contact</h2>
+    <form method="POST">
+        <input type="text" name="name" value="{{ name if contact else '' }}" placeholder="Name" required {% if contact %}readonly{% endif %}>
+        <input type="email" name="email" value="{{ contact.Email if contact else '' }}" placeholder="Email" required>
+        <input type="text" name="phone" value="{{ contact.Phone if contact else '' }}" placeholder="Phone" required>
+        <button type="submit">{% if contact %}Update{% else %}Add{% endif %} Contact</button>
+    </form>
+    <a href="{{ url_for('index') }}">Back to Contacts</a>
+{% endblock %}

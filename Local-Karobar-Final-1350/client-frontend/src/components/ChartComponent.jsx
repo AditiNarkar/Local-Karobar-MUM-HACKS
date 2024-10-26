@@ -43,7 +43,8 @@ export const ChartComponent = () => {
 
     // Chart options
     const options = {
-        responsive: true,
+        responsive: false,
+        maintainAspectRatio: false,
         scales: {
             y: {
                 beginAtZero: true
@@ -53,8 +54,8 @@ export const ChartComponent = () => {
 
     return (
         <div>
-            <h2>Item Data Chart</h2>
-            <Bar data={chartData} options={options} />
+            <h4>Item Data Chart</h4>
+            <Bar data={chartData} options={options} width={700} />
         </div>
     )
 }
