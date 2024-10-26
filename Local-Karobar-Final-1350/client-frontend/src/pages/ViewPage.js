@@ -8,7 +8,7 @@ import { ViewBranchBox } from "../components/ViewBranchBox"
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ChartComponent } from "../components/ChartComponent"
+import { BranchDataChart, ItemDataChart, StockDataChart, SupplierDataChart } from "../components/ChartComponent"
 
 const ViewPage = () => {
 
@@ -203,7 +203,10 @@ const ViewPage = () => {
           <div className="yellow-box-before4" />
           <div className="profile2">A N A L Y S I S</div>
           <div class="chart">
-            <ChartComponent />
+            <ItemDataChart />
+            <BranchDataChart/>
+            <SupplierDataChart/>
+            <StockDataChart/>
           </div>
         </div>
 
