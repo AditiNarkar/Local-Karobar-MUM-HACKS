@@ -10,14 +10,14 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     password: {
-        type: String, 
+        type: String,
     },
 
     generatedToken: {
-        type:String,
+        type: String,
     },
-    resetTokenExpiry:{
-        type:String,
+    resetTokenExpiry: {
+        type: String,
     },
 
     karobars: [{
@@ -25,111 +25,162 @@ const userSchema = new mongoose.Schema({
             type: String,
         },
         orgEmail: {
-            type: String, 
+            type: String,
         },
         category: {
-            type: String, 
+            type: String,
         },
         orgName: {
-            type: String, 
+            type: String,
         },
         no_of_people: {
-            type: Number, 
+            type: Number,
         },
         gender: {
-            type: String, 
+            type: String,
         },
         profilephoto: {
-           type: String 
+            type: String
         },
-        karobarphotos :[{
-            type: String 
+        karobarphotos: [{
+            type: String
         }],
         no_of_branches: {
-            type: Number, 
+            type: Number,
         },
         branchData: [{
-            brContact:{
-                type: String, 
+            brContact: {
+                type: String,
             },
-            brAddress:{
-                type: String, 
+            brAddress: {
+                type: String,
             },
-            lat:{
-                type: String, 
+            lat: {
+                type: String,
             },
             long: {
                 type: String,
             },
             additionalInfo: [{
-                tag : {
+                tag: {
                     type: String,
                 },
-                description : {
-                    type : String,
+                description: {
+                    type: String,
                 }
             }]
+        }],
+        suppliers: [{
+            supplierID: {
+                type: String,
+            },
+            supplierName: {
+                type: String,
+            },
+            supplierContact: {
+                type: String,
+            },
+            supplierAddress: {
+                type: String,
+            },
+            supplierLeadTime: {
+                type: Number,
+            }
+        }],
+        stock: [{
+            stockQty: {
+                type: Number,
+            },
+            stockMinLevel: {
+                type: Number,
+            },
+            stockMaxLevel: {
+                type: Number,
+            },
+            stockSupplier: {
+                type: String,
+            }
+        }],
+        items: [{
+            itemID: {
+                type: String,
+            },
+            itemName: {
+                type: String,
+            },
+            itemSKU: {
+                type: String,
+            },
+            itemDesc: {
+                type: String,
+            },
+            itemSellingPrize: {
+                type: Number,
+            },
+            itemCostPrize: {
+                type: Number,
+            }
         }]
     }]
 },)
 
-userSchema.pre('save', async function(next){
-    if(this.isModified('password')){
-        this.password = await bcrypt.hash(this.password,12)
-        }
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 12)
+    }
     next()
 })
 
-userSchema.methods.generateAuthToken = async function (res){
-    try{
-        let token = jwt.sign({_id:this._id}, process.env.SECRET_KEY)
-        
+userSchema.methods.generateAuthToken = async function (res) {
+    try {
+        let token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY)
+
         res.cookie('jwtoken', token, {
             httpOnly: true,
             secure: false,
             sameSite: 'strict', //ssr attcaks
-            maxAge: 30*24*60*60*1000 //30 days
+            maxAge: 30 * 24 * 60 * 60 * 1000 //30 days
         })
 
         return token
-        
-    }catch(error){
-        console.log("Token Db error: ",error)
+
+    } catch (error) {
+        console.log("Token Db error: ", error)
     }
 }
 
 //NOT IN USE BY ANY PAGE
-userSchema.methods.registerKarobar = async function(
-    orgName     , 
-    noOfPeople  , 
-    orgEmail    , 
-    gender      , 
-    brContact   , 
-    brLat       ,
-    brLng       ,
-    brAddress   , 
-    addTag      , 
-    addDesc     , 
-    counter     , 
-    ownerName   , 
-    category    ,  
-){
+userSchema.methods.registerKarobar = async function (
+    orgName,
+    noOfPeople,
+    orgEmail,
+    gender,
+    brContact,
+    brLat,
+    brLng,
+    brAddress,
+    addTag,
+    addDesc,
+    counter,
+    ownerName,
+    category,
+) {
 
-    try{
+    try {
 
         this.karobars = this.karobars.concat({
-            ownerName      : ownerName,
-            orgEmail       : orgEmail,
-            category       : category ,
-            orgName        : orgName,
-            no_of_people   : noOfPeople,
-            gender         : gender ,
-            no_of_branches : counter,
-            brContact      : brContact,
-            profilephoto   : "",
-            brAddress      : brAddress,
-            lat            : brLat,
-            long           : brLng,
+            ownerName: ownerName,
+            orgEmail: orgEmail,
+            category: category,
+            orgName: orgName,
+            no_of_people: noOfPeople,
+            gender: gender,
+            no_of_branches: counter,
+            brContact: brContact,
+            profilephoto: "",
+            brAddress: brAddress,
+            lat: brLat,
+            long: brLng,
 
 
             //karobarphotos  : {},
@@ -138,20 +189,20 @@ userSchema.methods.registerKarobar = async function(
             //     long   : brLng,
             //     text   : brAddress,
             // },
-            additionalInfo : {
-                tag         : addTag,
-                description : addDesc
+            additionalInfo: {
+                tag: addTag,
+                description: addDesc
             },
         })
-        
-       await this.save()
 
-       const karobarId = updatedUser.karobars[updatedUser.karobars.length - 1]._id.toString();
-       console.log(karobarId)
+        await this.save()
+
+        const karobarId = updatedUser.karobars[updatedUser.karobars.length - 1]._id.toString();
+        console.log(karobarId)
 
         return this.karobarId;
     }
-    catch(error){
+    catch (error) {
         console.log("register karobar error: ", error)
         return null;
     }

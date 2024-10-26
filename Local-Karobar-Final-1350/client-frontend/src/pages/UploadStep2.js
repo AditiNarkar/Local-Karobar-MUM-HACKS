@@ -10,9 +10,38 @@ import 'react-toastify/dist/ReactToastify.css'
 const UploadStep2 = () => {
 
   const [karobar, setKarobar] = useState({
-    orgName: "", no_of_people: 1, orgEmail: "", otp: "", gender: "Male", brContact: "",
-    brLat: "", brLng: "", addTag: "", addDesc: ""
-  })
+    orgName: "",
+    no_of_people: 1,
+    orgEmail: "",
+    otp: "",
+    gender: "Male",
+    brContact: "",
+    brLat: "",
+    brLng: "",
+    addTag: "",
+    addDesc: "",
+
+    // Supplier details
+    supplierID: "",
+    supplierName: "",
+    supplierContact: "",
+    supplierAddress: "",
+    supplierLeadTime: "",
+
+    // Stock details
+    stockQty: "",
+    stockMinLevel: "",
+    stockMaxLevel: "",
+    stockSupplier: "",
+
+    // Item details
+    itemID: "",
+    itemName: "",
+    itemSKU: "",
+    itemDesc: "",
+    itemSellingPrize: "",
+    itemCostPrize: ""
+  });
 
   // const { selectedPlace } = 
   //   (localStorage.getItem('mapsAddress') && localStorage.getItem('mapsAddress') !='') ? 
@@ -188,8 +217,38 @@ const UploadStep2 = () => {
   const postKarobar = async (e) => {
     e.preventDefault()
     const formData = new FormData()
-    const { orgName, no_of_people, otp, gender, brContact, brLat, brLng, addTag, addDesc } = karobar //addition
+    const {
+      orgName,
+      no_of_people,
+      otp,
+      gender,
+      brContact,
+      brLat,
+      brLng,
+      addTag,
+      addDesc,
 
+      // Supplier details
+      supplierID,
+      supplierName,
+      supplierContact,
+      supplierAddress,
+      supplierLeadTime,
+
+      // Stock details
+      stockQty,
+      stockMinLevel,
+      stockMaxLevel,
+      stockSupplier,
+
+      // Item details
+      itemID,
+      itemName,
+      itemSKU,
+      itemDesc,
+      itemSellingPrize,
+      itemCostPrize
+    } = karobar;
     //addition
     const input = document.querySelector('input[name="karobarphotos"]')
     if (input.files) {
@@ -203,20 +262,42 @@ const UploadStep2 = () => {
     else
       formData.append("profilephoto", " ")
 
-    formData.append('orgName', orgName)
-    formData.append('noOfPeople', no_of_people)
-    formData.append('orgEmail', orgEmail)
-    formData.append('otp', otp)
-    formData.append('gender', gender)
-    formData.append('brContact', brContact)
-    formData.append('brAddress', brAddress)
-    formData.append('addTag', addTag)
-    formData.append('addDesc', addDesc)
-    formData.append('counter', counter)
-    formData.append('category', category)
-    formData.append('ownerName', ownerName)
-    formData.append('brLat', brLat)//addition
-    formData.append('brLng', brLng)
+    formData.append('orgName', orgName);
+    formData.append('noOfPeople', no_of_people);
+    formData.append('orgEmail', orgEmail);
+    formData.append('otp', otp);
+    formData.append('gender', gender);
+    formData.append('brContact', brContact);
+    formData.append('brAddress', brAddress);
+    formData.append('addTag', addTag);
+    formData.append('addDesc', addDesc);
+    formData.append('counter', counter);
+    formData.append('category', category);
+    formData.append('ownerName', ownerName);
+    formData.append('brLat', brLat);
+    formData.append('brLng', brLng);
+
+    // Supplier details
+    formData.append('supplierID', supplierID);
+    formData.append('supplierName', supplierName);
+    formData.append('supplierContact', supplierContact);
+    formData.append('supplierAddress', supplierAddress);
+    formData.append('supplierLeadTime', supplierLeadTime);
+
+    // Stock details
+    formData.append('stockQty', stockQty);
+    formData.append('stockMinLevel', stockMinLevel);
+    formData.append('stockMaxLevel', stockMaxLevel);
+    formData.append('stockSupplier', stockSupplier);
+
+    // Item details
+    formData.append('itemID', itemID);
+    formData.append('itemName', itemName);
+    formData.append('itemSKU', itemSKU);
+    formData.append('itemDesc', itemDesc);
+    formData.append('itemSellingPrize', itemSellingPrize);
+    formData.append('itemCostPrize', itemCostPrize);
+
 
     formData.append("username", username)
     formData.append("userId", dbuserId)
@@ -524,15 +605,15 @@ const UploadStep2 = () => {
 
           <div className="add-inputs4">
             <div className="contact18">Supplier ID* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.supplierID} onChange={handleInputs} name='supplierID' type="text" />
             <div className="contact18">Supplier Name* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.supplierName} onChange={handleInputs} name='supplierName' type="text" />
             <div className="contact18">Contact* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.supplierContact} onChange={handleInputs} name='supplierContact' type="text" />
             <div className="contact18">Address* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.supplierAddress} onChange={handleInputs} name='supplierAddress' type="text" />
             <div className="contact18">Lead Time* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.supplierLeadTime} onChange={handleInputs} name='supplierLeadTime' type="text" />
 
             <button className="open-maps-button20" onClick={openMaps}>
               <div className="use-maps1">Add </div>
@@ -574,13 +655,13 @@ const UploadStep2 = () => {
 
           <div className="add-inputs4">
             <div className="contact18">Qty. in Stock* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.stockQty} onChange={handleInputs} name='stockQty' type="text" />
             <div className="contact18">Min. Level* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.stockMinLevel} onChange={handleInputs} name='stockMinLevel' type="text" />
             <div className="contact18">Max. Level* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.stockMaxLevel} onChange={handleInputs} name='stockMaxLevel' type="text" />
             <div className="contact18">Supplier* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.stockSupplier} onChange={handleInputs} name='stockSupplier' type="text" />
 
             <button className="open-maps-button20" onClick={openMaps}>
               <div className="use-maps1">Add </div>
@@ -625,17 +706,17 @@ const UploadStep2 = () => {
 
           <div className="add-inputs4">
             <div className="contact18">Item ID / Code* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.itemID} onChange={handleInputs} name='itemID' type="text" />
             <div className="contact18">Item Name* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.itemName} onChange={handleInputs} name='itemName' type="text" />
             <div className="contact18">SKU (Stock Keeping Unit)* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.itemSKU} onChange={handleInputs} name='itemSKU' type="text" />
             <div className="contact18">Description* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.itemDesc} onChange={handleInputs} name='itemDesc' type="text" />
             <div className="contact18">Selling Prize (INR)* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.itemSellingPrize} onChange={handleInputs} name='itemSellingPrize' type="text" />
             <div className="contact18">Cost Prize (INR)* :</div>
-            <input className="branch-contact" value={"100"} onChange={handleInputs} name='supplierID' type="text" />
+            <input className="branch-contact" value={karobar.itemCostPrize} onChange={handleInputs} name='itemCostPrize' type="text" />
 
             <button className="open-maps-button20" onClick={openMaps}>
               <div className="use-maps1">Add </div>
