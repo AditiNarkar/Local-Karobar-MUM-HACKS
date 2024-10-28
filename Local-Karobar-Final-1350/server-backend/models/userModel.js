@@ -1,212 +1,224 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-    },
-    email: {
-        type: String,
-    },
-    password: {
-        type: String,
-    },
+  username: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
 
-    generatedToken: {
-        type: String,
-    },
-    resetTokenExpiry: {
-        type: String,
-    },
+  generatedToken: {
+    type: String,
+  },
+  resetTokenExpiry: {
+    type: String,
+  },
 
-    karobars: [{
-        ownerName: {
-            type: String,
+  karobars: [
+    {
+      ownerName: {
+        type: String,
+      },
+      orgEmail: {
+        type: String,
+      },
+      category: {
+        type: String,
+      },
+      orgName: {
+        type: String,
+      },
+      no_of_people: {
+        type: Number,
+      },
+      gender: {
+        type: String,
+      },
+      profilephoto: {
+        type: String,
+      },
+      karobarphotos: [
+        {
+          type: String,
         },
-        orgEmail: {
+      ],
+      no_of_branches: {
+        type: Number,
+      },
+      branchData: [
+        {
+          brContact: {
             type: String,
-        },
-        category: {
+          },
+          brAddress: {
             type: String,
-        },
-        orgName: {
+          },
+          // Optional
+          lat: {
             type: String,
+          },
+          long: {
+            type: String,
+          },
+          //Optional
+          additionalInfo: [
+            {
+              tag: {
+                type: String,
+              },
+              description: {
+                type: String,
+              },
+            },
+          ],
         },
-        no_of_people: {
+      ],
+      suppliers: [
+        {
+          supplierID: {
+            type: String,
+          },
+          supplierName: {
+            type: String,
+          },
+          supplierContact: {
+            type: String,
+          },
+          supplierAddress: {
+            type: String,
+          },
+          supplierLeadTime: {
             type: Number,
+          },
         },
-        gender: {
-            type: String,
-        },
-        profilephoto: {
-            type: String
-        },
-        karobarphotos: [{
-            type: String
-        }],
-        no_of_branches: {
+      ],
+      stock: [
+        {
+          stockQty: {
             type: Number,
+          },
+          stockMinLevel: {
+            type: Number,
+          },
+          stockMaxLevel: {
+            type: Number,
+          },
+          stockSupplier: {
+            type: String,
+          },
         },
-        branchData: [{
-            brContact: {
-                type: String,
-            },
-            brAddress: {
-                type: String,
-            },
-            lat: {
-                type: String,
-            },
-            long: {
-                type: String,
-            },
-            additionalInfo: [{
-                tag: {
-                    type: String,
-                },
-                description: {
-                    type: String,
-                }
-            }]
-        }],
-        suppliers: [{
-            supplierID: {
-                type: String,
-            },
-            supplierName: {
-                type: String,
-            },
-            supplierContact: {
-                type: String,
-            },
-            supplierAddress: {
-                type: String,
-            },
-            supplierLeadTime: {
-                type: Number,
-            }
-        }],
-        stock: [{
-            stockQty: {
-                type: Number,
-            },
-            stockMinLevel: {
-                type: Number,
-            },
-            stockMaxLevel: {
-                type: Number,
-            },
-            stockSupplier: {
-                type: String,
-            }
-        }],
-        items: [{
-            itemID: {
-                type: String,
-            },
-            itemName: {
-                type: String,
-            },
-            itemSKU: {
-                type: String,
-            },
-            itemDesc: {
-                type: String,
-            },
-            itemSellingPrize: {
-                type: Number,
-            },
-            itemCostPrize: {
-                type: Number,
-            }
-        }]
-    }]
-},)
+      ],
+      items: [
+        {
+          itemID: {
+            type: String,
+          },
+          itemName: {
+            type: String,
+          },
+          itemSKU: {
+            type: String,
+          },
+          itemDesc: {
+            type: String,
+          },
+          itemSellingPrize: {
+            type: Number,
+          },
+          itemCostPrize: {
+            type: Number,
+          },
+        },
+      ],
+    },
+  ],
+});
 
-userSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, 12)
-    }
-    next()
-})
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 12);
+  }
+  next();
+});
 
 userSchema.methods.generateAuthToken = async function (res) {
-    try {
-        let token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY)
+  try {
+    let token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY);
 
-        res.cookie('jwtoken', token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'strict', //ssr attcaks
-            maxAge: 30 * 24 * 60 * 60 * 1000 //30 days
-        })
+    res.cookie("jwtoken", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict", //ssr attcaks
+      maxAge: 30 * 24 * 60 * 60 * 1000, //30 days
+    });
 
-        return token
-
-    } catch (error) {
-        console.log("Token Db error: ", error)
-    }
-}
+    return token;
+  } catch (error) {
+    console.log("Token Db error: ", error);
+  }
+};
 
 //NOT IN USE BY ANY PAGE
 userSchema.methods.registerKarobar = async function (
-    orgName,
-    noOfPeople,
-    orgEmail,
-    gender,
-    brContact,
-    brLat,
-    brLng,
-    brAddress,
-    addTag,
-    addDesc,
-    counter,
-    ownerName,
-    category,
+  orgName,
+  noOfPeople,
+  orgEmail,
+  gender,
+  brContact,
+  brLat,
+  brLng,
+  brAddress,
+  addTag,
+  addDesc,
+  counter,
+  ownerName,
+  category
 ) {
+  try {
+    this.karobars = this.karobars.concat({
+      ownerName: ownerName,
+      orgEmail: orgEmail,
+      category: category,
+      orgName: orgName,
+      no_of_people: noOfPeople,
+      gender: gender,
+      no_of_branches: counter,
+      brContact: brContact,
+      profilephoto: "",
+      brAddress: brAddress,
+      lat: brLat,
+      long: brLng,
 
-    try {
+      //karobarphotos  : {},
+      // brAddress      : {
+      //     lat    : brLat,
+      //     long   : brLng,
+      //     text   : brAddress,
+      // },
+      additionalInfo: {
+        tag: addTag,
+        description: addDesc,
+      },
+    });
 
-        this.karobars = this.karobars.concat({
-            ownerName: ownerName,
-            orgEmail: orgEmail,
-            category: category,
-            orgName: orgName,
-            no_of_people: noOfPeople,
-            gender: gender,
-            no_of_branches: counter,
-            brContact: brContact,
-            profilephoto: "",
-            brAddress: brAddress,
-            lat: brLat,
-            long: brLng,
+    await this.save();
 
+    const karobarId =
+      updatedUser.karobars[updatedUser.karobars.length - 1]._id.toString();
+    console.log(karobarId);
 
-            //karobarphotos  : {},
-            // brAddress      : {
-            //     lat    : brLat,
-            //     long   : brLng,
-            //     text   : brAddress,
-            // },
-            additionalInfo: {
-                tag: addTag,
-                description: addDesc
-            },
-        })
-
-        await this.save()
-
-        const karobarId = updatedUser.karobars[updatedUser.karobars.length - 1]._id.toString();
-        console.log(karobarId)
-
-        return this.karobarId;
-    }
-    catch (error) {
-        console.log("register karobar error: ", error)
-        return null;
-    }
-}
+    return this.karobarId;
+  } catch (error) {
+    console.log("register karobar error: ", error);
+    return null;
+  }
+};
 
 // this.karobars.brAddress = this.karobars.brAddress.concat({
 //     lat    : brLat,
@@ -219,6 +231,6 @@ userSchema.methods.registerKarobar = async function (
 //     description : addDesc
 // })
 
-const USER = mongoose.model('2signup', userSchema)
+const USER = mongoose.model("2signup", userSchema);
 
 module.exports = USER;
